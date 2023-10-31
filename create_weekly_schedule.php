@@ -37,11 +37,12 @@
                         $foodId = $valueArray[0];
                         $personId = $valueArray[1];
                         $dayId = $valueArray[2];
+                        $date = $valueArray[3];
 
                         array_push($postArray, [$personId, $dayId, $foodId]);
                     }
 
-                    echo $date; //!!!!!!!! Change !!!!!!!!!!
+                    //echo $date; //!!!!!!!! Change !!!!!!!!!!
                     insertFoodAndPerson($postArray, $date);
                 }
 
