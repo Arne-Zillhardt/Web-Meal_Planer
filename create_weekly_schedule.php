@@ -17,10 +17,10 @@
         <?php
             echo '<input type="date" name="date" id="date" onchange="this.form.submit()"';
             if(isset($_POST['date'])){
-                echo " value=". $_POST['date'] ."";
                 $date = $_POST['date'];
                 $foodArray = getFoodAndPersonAtSpecificDate($date);
             }
+            echo " value=". $date ."";
 
             echo ">";
             ?>
@@ -30,12 +30,22 @@
             <table>
                 <?php
                 if(isset($_POST['submit'])){
+                    $postArray = [];
                     foreach($_POST['food'] as $postedFood){
                         $valueArray = explode(",",$postedFood);
-                        print_r(explode(",",$postedFood));
-                        break;
+                        
+                        $foodId = $valueArray[0];
+                        $personId = $valueArray[1];
+                        $dayId = $valueArray[2];
+
+                        array_push($postArray, [$personId, $dayId, $foodId]);
                     }
+
+                    echo $date; //!!!!!!!! Change !!!!!!!!!!
+                    insertFoodAndPerson($postArray, $date);
                 }
+
+                createHeader();
 
                 $j = 1;
                 foreach($days as $day){
@@ -43,7 +53,7 @@
     
                     for($i=1;$i<=$personLength;$i++){
                         echo '<td><select name="food[]">';
-                        echo "<option value=-1,$i,$j></option>";
+                        echo "<option value=-1,$i,$j,$date></option>";
     
                         $foodId = null;
                         foreach($foodArray as $foodAndPerson){
@@ -60,7 +70,7 @@
                             $id = $food[0];
                             $foodName = $food[1];
 
-                            echo '<option value="' . $id . ','. $i. ','. $j. '"';
+                            echo '<option value="' . $id . ','. $i. ','. $j. ','. $date .'"';
                             if($foodId == $id){
                                 echo ' selected ';
                             }
@@ -74,67 +84,6 @@
                     $j++;
                     echo "</tr>";
                 }
-
-                /*if(isset($_POST["submit"])){
-                    $foodForPerson = [];
-                    $cout = 0;
-
-                    $i = 1;
-                    $dayId = 1;
-                    foreach($_POST['food'] as $postedFood){
-                        $personId = $i;
-                        array_push($foodForPerson, [$personId, $postedFood, $dayId]);
-
-                        if($i%4==0){
-                            $dayId++;
-                            $i = 0;
-                        }
-                        $i++;
-                    }
-
-                    insertFoodAndPerson($foodForPerson, $date);
-                }
-
-                createHeader();
-                $foodArray = getFoodAndPersonAtSpecificDate($date);
-
-                $mult = 0;
-                for($i=0; $i<sizeof($days); $i++) {
-                    echo "<tr>";
-                    echo "<th>". $days[$i] ."</th>";
-
-                    for($j=0; $j<$GLOBALS['Personlength']; $j++) {
-                        echo "<td>";
-                        $foodAtCurrentDay = "";
-                        if (isset($foodArray[$j + $mult])) {
-                            $foodRow = $foodArray[$j + $mult];
-                            $foodAtCurrentDay = $foodRow['food_name'];
-                        }
-
-                        echo '<select name="food[]">';
-
-                        //echo $foodAtCurrentDay
-                        if(empty($foodAtCurrentDay)) {
-                            echo '<option value="-1"></option>';
-                        }
-
-                        foreach($food as $foodName){
-                            echo '<option value="'. $foodName[0] .'"';
-
-                            if($foodName[1] == $foodAtCurrentDay){
-                                echo " selected";
-                            }
-
-                            echo '>'. $foodName[1] .'</option>';
-                        }
-
-                        echo "</select>";
-                        echo "</td>";
-                    }
-                    $mult += $GLOBALS['Personlength'];
-
-                    echo "</tr>";
-                }*/
                 ?>
             </table>
         </div>

@@ -16,10 +16,10 @@
         <?php
             echo '<input type="date" name="date" id="date" onchange="this.form.submit()"';
             if(isset($_POST['date'])){
-                echo " value=". $_POST['date'] ."";
                 $date = $_POST['date'];
                 $foodArray = getFoodAndPersonAtSpecificDate($date);
             }
+            echo " value=". $date ."";
 
             echo ">";
             ?>
