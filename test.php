@@ -49,5 +49,10 @@
 </body>
 
 <?php
+$date = date('D') == 'Mon' ? date("Y-m-d") : date("Y-m-d", strtotime("this Monday"));
+echo $date;
 
+include 'utils.php';
+echo "<br>". $GLOBALS['Monday_Date'];
+echo "<br>". date('d-m-Y',strtotime("Monday"));
 ?>

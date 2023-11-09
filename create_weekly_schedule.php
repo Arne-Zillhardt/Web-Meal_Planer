@@ -13,11 +13,32 @@
 </head>
 
 <body>
+    <?php
+    if(isset($_POST['submit'])){
+        $postArray = [];
+        foreach($_POST['food'] as $postedFood){
+            $valueArray = explode(",",$postedFood);
+            
+            $foodId = $valueArray[0];
+            $personId = $valueArray[1];
+            $dayId = $valueArray[2];
+            $date = date("Y-m-d", strtotime("+ ". ($dayId - 1) ."days", strtotime($valueArray[3])));
+            
+            //Set date to sumbitted date
+
+            array_push($postArray, [$personId, $dayId, $foodId, $date]);
+        }
+
+        $date = date("Y-m-d", strtotime("monday this week", strtotime($postArray[0][3])));
+        insertFoodAndPerson($postArray);
+        $foodArray = getFoodAndPersonAtSpecificDate($date);
+    }
+    ?>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" onsubmit="return false;">
         <?php
             echo '<input type="date" name="date" id="date" onchange="this.form.submit()"';
             if(isset($_POST['date'])){
-                $date = $_POST['date'];
+                $date = date("Y-m-d", strtotime("monday this week", strtotime($_POST['date'])));
                 $foodArray = getFoodAndPersonAtSpecificDate($date);
             }
             echo " value=". $date ."";
@@ -29,23 +50,6 @@
         <div class="grid-container">
             <table>
                 <?php
-                if(isset($_POST['submit'])){
-                    $postArray = [];
-                    foreach($_POST['food'] as $postedFood){
-                        $valueArray = explode(",",$postedFood);
-                        
-                        $foodId = $valueArray[0];
-                        $personId = $valueArray[1];
-                        $dayId = $valueArray[2];
-                        $date = $valueArray[3];
-
-                        array_push($postArray, [$personId, $dayId, $foodId]);
-                    }
-
-                    //echo $date; //!!!!!!!! Change !!!!!!!!!!
-                    insertFoodAndPerson($postArray, $date);
-                }
-
                 createHeader();
 
                 $j = 1;
